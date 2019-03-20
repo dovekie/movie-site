@@ -9,7 +9,7 @@
     "create-react-app": "^2.1.8"
   },
   "scripts": {
-    "build": "cd backend && yarn install",
+    "build": "cd backend && yarn install && cd ../client && yarn install",
     "start": "concurrently \"cd backend && node server.js\" \"cd client && yarn start\""
   }
 }
