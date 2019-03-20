@@ -3,5 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "<dovekie@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^4.1.0",
+    "create-react-app": "^2.1.8"
+  },
+  "scripts": {
+    "build": "cd backend && yarn install",
+    "start": "concurrently \"cd backend && node server.js\" \"cd client && yarn start\""
+  }
 }
