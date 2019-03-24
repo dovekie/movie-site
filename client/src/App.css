@@ -55,12 +55,11 @@ input[type=text] {
   -webkit-appearance: none;
 }
 
-.navigation span {
+.navigation button {
   cursor: pointer;
   background-color: #3498DB;
   color: white;
   margin: 10px;
-  margin-top: 200px;
 }
 
 /* Dropdown stuffs */

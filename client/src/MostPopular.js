@@ -13,7 +13,6 @@ class MostPopular extends Component {
           const pagination = this.calculatePagination(data.data);
           this.setState({pagination});
           this.setState({data: {movies: data.data.results}})});
-          this.setState({currentQuery: 'http://localhost:3001/'})
     }
 
     calculatePagination = (data) => {
@@ -32,6 +31,7 @@ class MostPopular extends Component {
     }
 
     showGenre = (genreId) => {
+      this.setState({genreId})
       document.getElementById("genreDropdown").classList.toggle("show");
       fetch(`http://localhost:3001/search/genre/${genreId}`)
         .then((response) => response.json())
@@ -53,21 +53,14 @@ class MostPopular extends Component {
         }
     }
 
-    getNextPage = () => {
-      console.log("CURRENT LOCATION", window.location.href);
-      const nextPage = this.state.pagination.nextPage;
-      fetch(`http://localhost:3001/?page=${nextPage}`)
-        .then((response) => response.json())
-        .then((data) => {
-          this.setState({data: {movies: data.data.results}})
-          const pagination = this.calculatePagination(data.data);
-          this.setState({pagination});
-        });
-    }
-
-    getPreviousPage = () => {
-      console.log("CURRENT LOCATION", this.props.location);
-      fetch(`http://localhost:3001/?page=${this.state.pagination.previousPage}`)
+    getAnotherPage = (direction) => {
+      let newPage = this.state.pagination.nextPage;
+      if (direction === 'backward') newPage = this.state.pagination.previousPage;
+      let endpointToFetch = `http://localhost:3001/?page=${newPage}`;
+      if (this.state.genreId != null) {
+        endpointToFetch = `http://localhost:3001/search/genre/${this.state.genreId}?page=${newPage}`
+      }
+      fetch(endpointToFetch)
         .then((response) => response.json())
         .then((data) => {
           this.setState({data: {movies: data.data.results}})
@@ -121,8 +114,8 @@ class MostPopular extends Component {
             </ul>
             <br />
             <div className="navigation">
-              <span onClick={() => {this.getPreviousPage()}}>Get Previous Page</span>
-              <span onClick={() => {this.getNextPage()}}>Get Next Page</span>
+              <button onClick={() => {this.getAnotherPage('backward')}}>Get Previous Page</button>
+              <button onClick={() => {this.getAnotherPage('forward')}}>Get Next Page</button>
             </div>
             </div>
           </div>
