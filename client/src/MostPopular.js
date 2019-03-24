@@ -53,8 +53,27 @@ class MostPopular extends Component {
         }
     }
 
-    clickForNextPage = () => {
+    getNextPage = () => {
+      console.log("CURRENT LOCATION", window.location.href);
+      const nextPage = this.state.pagination.nextPage;
+      fetch(`http://localhost:3001/?page=${nextPage}`)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({data: {movies: data.data.results}})
+          const pagination = this.calculatePagination(data.data);
+          this.setState({pagination});
+        });
+    }
 
+    getPreviousPage = () => {
+      console.log("CURRENT LOCATION", this.props.location);
+      fetch(`http://localhost:3001/?page=${this.state.pagination.previousPage}`)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({data: {movies: data.data.results}})
+          const pagination = this.calculatePagination(data.data);
+          this.setState({pagination});
+        });
     }
   
     render() {
@@ -100,6 +119,11 @@ class MostPopular extends Component {
                 </li>
               ))}
             </ul>
+            <br />
+            <div className="navigation">
+              <span onClick={() => {this.getPreviousPage()}}>Get Previous Page</span>
+              <span onClick={() => {this.getNextPage()}}>Get Next Page</span>
+            </div>
             </div>
           </div>
       );
