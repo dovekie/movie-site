@@ -11,8 +11,9 @@ const movieAPI = 'https://api.themoviedb.org/3/';
 const apiKey = process.env.MOVIE_API_KEY;
 
 // this method fetches the most popular movies
-app.get('/', (req, res) => {
-  fetch(`${movieAPI}movie/popular?api_key=${apiKey}`)
+app.get('/', async (req, res) => {
+  const page = req.query.page == null ? 1 : parseInt(req.query.page);
+  fetch(`${movieAPI}movie/popular?api_key=${apiKey}&page=${page}`)
     .then((res) => res.json())
     .then((data) => res.send({data}));
 });
@@ -21,7 +22,8 @@ app.get('/', (req, res) => {
 // https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=Captain+Marvel
 app.get('/search/title/:title', (req, res) => {
   const title = req.params.title;
-  console.log("Searching for", `${movieAPI}search/movie?api_key=${apiKey}&query=${title}`)
+  const page = req.query.page == null ? 1 : parseInt(req.query.page);
+  console.log("Searching for", `${movieAPI}search/movie?api_key=${apiKey}&query=${title}&page=${page}`)
   fetch(`${movieAPI}search/movie?api_key=${apiKey}&query=${title}`)
     .then((res) => res.json())
     .then((data) => res.send({data}));
@@ -35,6 +37,23 @@ app.get('/search/id/:id', (req, res) => {
   fetch(`${movieAPI}movie/${id}?api_key=${apiKey}`)
     .then((res) => res.json())
     .then((data) => res.send({data}));
+});
+
+app.get('/genres', (req, res) => {
+  console.log("Searching for", `${movieAPI}genre/movie/list`)
+  fetch(`${movieAPI}genre/movie/list?api_key=${apiKey}`)
+    .then((res) => res.json())
+    .then((data) => res.send({data}));
+});
+
+app.get('/search/genre/:genre', (req, res) => {
+  const genre = req.params.genre;
+  const page = req.query.page == null ? 1 : parseInt(req.query.page);
+  console.log("Searching for", `${movieAPI}discover/movie?api_key=${apiKey}&with_genres=${genre}&page=${page}`)
+  fetch(`${movieAPI}discover/movie?api_key=${apiKey}&with_genres=${genre}&page=${page}`)
+    .then((res) => res.json())
+    .then((data) => res.send({data}));
+
 });
 
 // launch our backend into a port
