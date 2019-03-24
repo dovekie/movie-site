@@ -13,7 +13,6 @@ class Movie extends Component {
 
   render() {
     const {data} = this.state;
-    console.log("wat", data)
     return (
         <div>
           <div className="Movie">
