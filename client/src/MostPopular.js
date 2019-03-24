@@ -37,8 +37,8 @@ class MostPopular extends Component {
         .then((response) => response.json())
         .then((data) => {
           this.setState({data: {movies: data.data.results}})
+          this.setState({currentQuery: `http://localhost:3001/search/genre/${genreId}`})
         })
-        this.setState({currentQuery: `http://localhost:3001/search/genre/${genreId}`})
     }
   
     searchByTitle = (message) => {
